@@ -27,3 +27,14 @@ menuToggle.addEventListener("click", () => {
 mobileNav.querySelectorAll("a").forEach((link) => {
   link.addEventListener("click", closeMobileNav);
 });
+
+const compareToggle = document.getElementById("compare-toggle");
+const compareTable = document.getElementById("compare-table");
+const compareChevron = document.getElementById("compare-chevron");
+
+compareToggle.addEventListener("click", () => {
+  const isExpanded = compareToggle.getAttribute("aria-expanded") === "true";
+  compareTable.classList.toggle("hidden", isExpanded);
+  compareChevron.classList.toggle("rotate-180", !isExpanded);
+  compareToggle.setAttribute("aria-expanded", String(!isExpanded));
+});
