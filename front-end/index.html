@@ -197,6 +197,69 @@
 
      </div>
    </section>
+
+   <section class="px-4 pb-12 text-center">
+     <button type="button" id="compare-toggle" aria-expanded="false" aria-controls="compare-table" class="mx-auto flex flex-col items-center gap-2">
+       <span class="text-h4">Compare features and plans</span>
+       <svg id="compare-chevron" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+         <polyline points="6 9 12 15 18 9"></polyline>
+       </svg>
+     </button>
+
+     <div id="compare-table" class="hidden mt-8 overflow-x-auto text-left">
+       <table class="w-full min-w-[640px] border-collapse text-sm">
+         <thead>
+           <tr>
+             <th class="px-4 py-3"></th>
+             <th class="border-t-4 border-teal bg-gray-50 px-4 py-3">Free</th>
+             <th class="border-t-4 border-blue bg-gray-50 px-4 py-3">Standard</th>
+             <th class="border-t-4 border-orange bg-gray-50 px-4 py-3">Pro</th>
+             <th class="border-t-4 border-charcoal bg-gray-50 px-4 py-3">Enterprise</th>
+           </tr>
+         </thead>
+         <tbody>
+           <tr>
+             <td colspan="5" class="pb-2 pt-6 text-xs font-semibold uppercase tracking-wide text-gray-500">Data usage</td>
+           </tr>
+           <tr class="border-t border-gray-200">
+             <td class="px-4 py-3 font-medium">Free limits</td>
+             <td class="px-4 py-3 text-center">100GB free / month</td>
+             <td class="px-4 py-3 text-center">100GB free / month</td>
+             <td class="px-4 py-3 text-center">100GB free / month</td>
+             <td class="px-4 py-3 text-center">100GB free / month</td>
+           </tr>
+           <tr class="border-t border-gray-200">
+             <td class="px-4 py-3 font-medium">Cost per GB</td>
+             <td class="px-4 py-3 text-center text-gray-400">N/A</td>
+             <td class="px-4 py-3 text-center">$0.25 / GB beyond free limit</td>
+             <td class="px-4 py-3 text-center text-gray-400">N/A</td>
+             <td class="px-4 py-3 text-center text-gray-400">N/A</td>
+           </tr>
+           <tr class="border-t border-gray-200">
+             <td class="px-4 py-3 font-medium">Retention</td>
+             <td class="px-4 py-3 text-center">8+ days</td>
+             <td class="px-4 py-3 text-center">8+ days</td>
+             <td class="px-4 py-3 text-center">Extended</td>
+             <td class="px-4 py-3 text-center">Extended</td>
+           </tr>
+           <tr class="border-t border-gray-200">
+             <td class="px-4 py-3 font-medium">HIPAA compliance</td>
+             <td class="px-4 py-3 text-center text-gray-300">&#10007;</td>
+             <td class="px-4 py-3 text-center text-gray-300">&#10007;</td>
+             <td class="px-4 py-3 text-center text-gray-300">&#10007;</td>
+             <td class="px-4 py-3 text-center text-charcoal">&#10003;</td>
+           </tr>
+           <tr class="border-t border-gray-200">
+             <td class="px-4 py-3 font-medium">FedRAMP</td>
+             <td class="px-4 py-3 text-center text-gray-300">&#10007;</td>
+             <td class="px-4 py-3 text-center text-gray-300">&#10007;</td>
+             <td class="px-4 py-3 text-center text-gray-300">&#10007;</td>
+             <td class="px-4 py-3 text-center text-charcoal">&#10003;</td>
+           </tr>
+         </tbody>
+       </table>
+     </div>
+   </section>
  </main>
  <footer></footer>
 </body>
