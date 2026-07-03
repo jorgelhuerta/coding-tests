@@ -1,0 +1,4 @@
+services:
+  movie_ratings.manager:
+    class: Drupal\movie_ratings\RatingManager
+    arguments: ['@database']

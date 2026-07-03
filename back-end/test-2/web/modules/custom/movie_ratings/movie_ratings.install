@@ -1,0 +1,56 @@
+<?php
+
+/**
+ * @file
+ * Install/schema hooks for the Movie Ratings module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function movie_ratings_schema() {
+  $schema['movie_ratings'] = [
+    'description' => 'Stores one star rating per movie per submitting IP address.',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary key.',
+      ],
+      'nid' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'The rated Movie node ID.',
+      ],
+      'rating' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'description' => 'Star rating, 1 to 5.',
+      ],
+      'ip_address' => [
+        'type' => 'varchar',
+        'length' => 45,
+        'not null' => TRUE,
+        'description' => 'Submitting IP address (IPv4 or IPv6), used to allow one vote per movie per visitor.',
+      ],
+      'created' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Timestamp the rating was submitted or last changed.',
+      ],
+    ],
+    'primary key' => ['id'],
+    'unique keys' => [
+      'nid_ip_address' => ['nid', 'ip_address'],
+    ],
+    'indexes' => [
+      'nid' => ['nid'],
+    ],
+  ];
+
+  return $schema;
+}

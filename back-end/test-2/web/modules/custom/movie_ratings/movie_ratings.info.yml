@@ -1,0 +1,7 @@
+name: Movie Ratings
+type: module
+description: 'Star rating submission and display for Movie nodes, backed by a custom table exposed to Views.'
+package: Movie Rating System
+core_version_requirement: ^10
+dependencies:
+  - movie_content

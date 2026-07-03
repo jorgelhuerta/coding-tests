@@ -1,0 +1,74 @@
+<?php
+
+/**
+ * @file
+ * Exposes the movie_ratings table to Views.
+ */
+
+/**
+ * Implements hook_views_data().
+ */
+function movie_ratings_views_data() {
+  $data['movie_ratings']['table']['group'] = t('Movie Rating');
+  $data['movie_ratings']['table']['provider'] = 'movie_ratings';
+  $data['movie_ratings']['table']['base'] = [
+    'field' => 'id',
+    'title' => t('Movie Ratings'),
+    'help' => t('One row per star rating submitted for a movie.'),
+  ];
+
+  $data['movie_ratings']['id'] = [
+    'title' => t('Rating ID'),
+    'help' => t('The primary key of the rating record.'),
+    'field' => ['id' => 'numeric'],
+    'filter' => ['id' => 'numeric'],
+    'sort' => ['id' => 'standard'],
+  ];
+
+  $data['movie_ratings']['nid'] = [
+    'title' => t('Movie'),
+    'help' => t('The rated movie node.'),
+    'relationship' => [
+      'id' => 'standard',
+      'base' => 'node_field_data',
+      'base field' => 'nid',
+      'relationship field' => 'nid',
+      'label' => t('Movie'),
+    ],
+    'field' => ['id' => 'numeric'],
+    'filter' => ['id' => 'numeric'],
+    'sort' => ['id' => 'standard'],
+  ];
+
+  $data['movie_ratings']['rating'] = [
+    'title' => t('Rating'),
+    'help' => t('The submitted star rating (1-5).'),
+    'field' => ['id' => 'numeric'],
+    'filter' => ['id' => 'numeric'],
+    'sort' => ['id' => 'standard'],
+  ];
+
+  $data['movie_ratings']['created'] = [
+    'title' => t('Submitted on'),
+    'help' => t('When the rating was submitted.'),
+    'field' => ['id' => 'date'],
+    'filter' => ['id' => 'date'],
+    'sort' => ['id' => 'date'],
+  ];
+
+  // Reverse relationship so views based on node_field_data (e.g. the Movies
+  // listing) can relate to their ratings and filter/sort by them.
+  $data['node_field_data']['movie_ratings'] = [
+    'title' => t('Movie Ratings'),
+    'help' => t('Relate a movie to its individual star rating submissions.'),
+    'relationship' => [
+      'id' => 'standard',
+      'base' => 'movie_ratings',
+      'base field' => 'nid',
+      'relationship field' => 'nid',
+      'label' => t('Movie Ratings'),
+    ],
+  ];
+
+  return $data;
+}
