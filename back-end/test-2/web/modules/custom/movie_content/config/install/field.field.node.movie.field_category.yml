@@ -1,0 +1,23 @@
+uuid: f64c6f02-673e-43d5-8395-85962c9f398e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_category
+    - node.type.movie
+id: node.movie.field_category
+field_name: field_category
+entity_type: node
+bundle: movie
+label: Category
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      categories: categories
+field_type: entity_reference

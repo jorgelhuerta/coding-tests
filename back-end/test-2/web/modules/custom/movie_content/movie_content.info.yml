@@ -1,0 +1,5 @@
+name: Movie Content
+type: module
+description: 'Content architecture for the movie rating system: Movie, Director and Actor content types and their fields.'
+package: Movie Rating System
+core_version_requirement: ^10

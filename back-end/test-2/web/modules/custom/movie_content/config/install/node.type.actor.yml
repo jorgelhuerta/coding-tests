@@ -1,0 +1,11 @@
+uuid: 9ca07198-281a-4f63-9440-2d68bd507373
+langcode: en
+status: true
+dependencies: {  }
+name: Actor
+type: actor
+description: 'A film actor.'
+help: null
+new_revision: true
+preview_mode: 1
+display_submitted: true
