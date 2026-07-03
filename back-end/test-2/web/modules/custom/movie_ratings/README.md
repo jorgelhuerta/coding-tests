@@ -44,6 +44,28 @@ custom SQL. Built programmatically via `ViewExecutable::newDisplay()` and
 map directly is unreliable, since it's schema-governed and gets reset to
 "inherit everything" unless set through `setOverride()`.
 
+## Movies view (`/movies`)
+
+This module also ships the `movies` view (a table of all Movie nodes) even
+though it's conceptually a `movie_content` concern, because its star-rating
+filter depends on a plugin that has to live here:
+
+- **Category** — `taxonomy_index_tid` filter on `field_category`, multi-select
+- **Director** / **Actor** — via a relationship to the referenced node,
+  filtering its title (`contains`), since entity-reference-to-node fields
+  don't get a dedicated name-based filter the way taxonomy references do
+- **Minimum average rating** — a custom filter plugin
+  (`MinimumAverageRating`, plugin ID `movie_minimum_average_rating`) that
+  adds a `nid IN (SELECT ... HAVING AVG(rating) >= ?)` subquery, rather than
+  turning the whole view into a grouped query via Views' built-in
+  aggregation — that would have required marking every existing field's
+  `group_type`, for one added filter.
+
+Watch for: exposed filter values arrive in `$this->value` as an array (e.g.
+`[4]`) even for a single scalar textfield, not as a plain scalar — casting
+it directly (`(float) $this->value`) silently produces `1.0` for any
+non-empty array. Unwrap with `reset()` first.
+
 ## Setup
 
 ```

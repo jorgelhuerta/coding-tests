@@ -70,5 +70,16 @@ function movie_ratings_views_data() {
     ],
   ];
 
+  // Star-rating filter for the Movies listing: a HAVING subquery rather
+  // than a relationship + Views aggregation, so it doesn't require turning
+  // the whole Movies view into a grouped query.
+  $data['node_field_data']['movie_ratings_average'] = [
+    'title' => t('Minimum Average Rating'),
+    'help' => t('Filters movies by minimum average star rating.'),
+    'filter' => [
+      'id' => 'movie_minimum_average_rating',
+    ],
+  ];
+
   return $data;
 }

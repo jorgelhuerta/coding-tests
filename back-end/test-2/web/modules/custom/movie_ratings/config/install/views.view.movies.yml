@@ -10,6 +10,7 @@ dependencies:
     - node.type.movie
     - taxonomy.vocabulary.categories
   module:
+    - movie_ratings
     - node
     - taxonomy
     - user
@@ -157,6 +158,15 @@ display:
           expose:
             label: Actor
             identifier: actor
+        movie_ratings_average:
+          id: movie_ratings_average
+          table: node_field_data
+          field: movie_ratings_average
+          plugin_id: movie_minimum_average_rating
+          exposed: true
+          expose:
+            label: 'Minimum average rating'
+            identifier: rating
       style:
         type: table
         options:

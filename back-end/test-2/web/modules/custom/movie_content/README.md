@@ -33,16 +33,10 @@ Taxonomy terms are content, not configuration, so they can't ship in
 
 ## Movies view (`/movies`)
 
-A table view of all Movie nodes with exposed filters:
-
-- **Category** — `taxonomy_index_tid` filter on `field_category`, multi-select
-- **Director** — via a relationship to the referenced Director node, filtering
-  its title (`contains`), since entity-reference-to-node fields don't get a
-  dedicated name-based filter plugin the way taxonomy references do
-- **Actor** — same pattern, via a relationship to the referenced Actor node
-
-A star-rating filter is added once the `movie_ratings` module exposes the
-ratings table to Views.
+The `movies` view (category/actor/director/rating filters) ships from the
+`movie_ratings` module, not this one — its rating filter depends on a plugin
+that lives there, and `movie_ratings` already depends on `movie_content`, so
+that's the direction the dependency has to run. See that module's README.
 
 ## Setup
 
