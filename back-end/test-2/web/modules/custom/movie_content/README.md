@@ -31,6 +31,19 @@ Taxonomy terms are content, not configuration, so they can't ship in
 `config/install`; they're seeded instead via `hook_install()` in
 `movie_content.module`.
 
+## Movies view (`/movies`)
+
+A table view of all Movie nodes with exposed filters:
+
+- **Category** — `taxonomy_index_tid` filter on `field_category`, multi-select
+- **Director** — via a relationship to the referenced Director node, filtering
+  its title (`contains`), since entity-reference-to-node fields don't get a
+  dedicated name-based filter plugin the way taxonomy references do
+- **Actor** — same pattern, via a relationship to the referenced Actor node
+
+A star-rating filter is added once the `movie_ratings` module exposes the
+ratings table to Views.
+
 ## Setup
 
 ```

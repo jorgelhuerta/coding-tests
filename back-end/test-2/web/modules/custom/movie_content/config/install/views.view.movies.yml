@@ -1,0 +1,262 @@
+uuid: ed62aff2-9882-4d23-ac68-371b5d2e6225
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_actor
+    - field.storage.node.field_category
+    - field.storage.node.field_director
+    - field.storage.node.field_year
+    - node.type.movie
+    - taxonomy.vocabulary.categories
+  module:
+    - node
+    - taxonomy
+    - user
+id: movies
+label: Movies
+module: views
+description: 'Listing of all movies with category, actor, director and rating filters.'
+tag: ''
+base_table: node_field_data
+base_field: nid
+display:
+  default:
+    id: default
+    display_title: Master
+    display_plugin: default
+    position: 0
+    display_options:
+      title: Movies
+      fields:
+        title:
+          id: title
+          table: node_field_data
+          field: title
+          entity_type: node
+          entity_field: title
+          plugin_id: field
+          label: Title
+        field_year:
+          id: field_year
+          table: node__field_year
+          field: field_year
+          entity_type: node
+          entity_field: field_year
+          plugin_id: field
+          label: Year
+        field_director:
+          id: field_director
+          table: node__field_director
+          field: field_director
+          entity_type: node
+          entity_field: field_director
+          plugin_id: field
+          label: Director
+        field_actor:
+          id: field_actor
+          table: node__field_actor
+          field: field_actor
+          entity_type: node
+          entity_field: field_actor
+          plugin_id: field
+          label: Actor
+        field_category:
+          id: field_category
+          table: node__field_category
+          field: field_category
+          entity_type: node
+          entity_field: field_category
+          plugin_id: field
+          label: Category
+      pager:
+        type: mini
+        options:
+          items_per_page: 20
+      exposed_form:
+        type: basic
+        options:
+          submit_button: Apply
+          reset_button: true
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
+          expose_sort_order: true
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      access:
+        type: perm
+        options:
+          perm: 'access content'
+      cache:
+        type: tag
+        options: {  }
+      sorts:
+        title:
+          id: title
+          table: node_field_data
+          field: title
+          entity_type: node
+          entity_field: title
+          plugin_id: standard
+          order: ASC
+      filters:
+        status:
+          id: status
+          table: node_field_data
+          field: status
+          entity_type: node
+          entity_field: status
+          plugin_id: boolean
+          value: '1'
+          group: 1
+        type:
+          id: type
+          table: node_field_data
+          field: type
+          entity_type: node
+          entity_field: type
+          plugin_id: bundle
+          value:
+            movie: movie
+        field_category_target_id:
+          id: field_category_target_id
+          table: node__field_category
+          field: field_category_target_id
+          entity_type: node
+          entity_field: field_category
+          plugin_id: taxonomy_index_tid
+          exposed: true
+          expose:
+            label: Category
+            identifier: category
+            required: false
+            multiple: true
+          vid: categories
+          type: select
+          hierarchy: false
+          limit: true
+        field_director_title:
+          id: field_director_title
+          table: node_field_data
+          field: title
+          relationship: field_director
+          plugin_id: string
+          operator: contains
+          exposed: true
+          expose:
+            label: Director
+            identifier: director
+        field_actor_title:
+          id: field_actor_title
+          table: node_field_data
+          field: title
+          relationship: field_actor
+          plugin_id: string
+          operator: contains
+          exposed: true
+          expose:
+            label: Actor
+            identifier: actor
+      style:
+        type: table
+        options:
+          columns:
+            title: title
+            field_year: field_year
+            field_director: field_director
+            field_actor: field_actor
+            field_category: field_category
+          default: title
+          info:
+            title:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_year:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_director:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_actor:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_category:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+      row:
+        type: fields
+      query:
+        type: views_query
+        options: {  }
+      relationships:
+        field_director:
+          id: field_director
+          table: node__field_director
+          field: field_director
+          plugin_id: standard
+          label: Director
+        field_actor:
+          id: field_actor
+          table: node__field_actor
+          field: field_actor
+          plugin_id: standard
+          label: Actor
+      display_extenders: {  }
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - 'user.node_grants:view'
+        - user.permissions
+      tags:
+        - 'config:field.storage.node.field_actor'
+        - 'config:field.storage.node.field_category'
+        - 'config:field.storage.node.field_director'
+        - 'config:field.storage.node.field_year'
+  page_1:
+    id: page_1
+    display_title: Page
+    display_plugin: page
+    position: 1
+    display_options:
+      display_extenders: {  }
+      path: movies
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - 'user.node_grants:view'
+        - user.permissions
+      tags:
+        - 'config:field.storage.node.field_actor'
+        - 'config:field.storage.node.field_category'
+        - 'config:field.storage.node.field_director'
+        - 'config:field.storage.node.field_year'
+    defaults:
+      path: false
