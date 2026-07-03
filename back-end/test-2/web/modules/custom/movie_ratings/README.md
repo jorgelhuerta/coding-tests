@@ -1,9 +1,9 @@
 # Movie Ratings
 
-Star rating storage, Views integration and sidebar rankings for Movie nodes.
-The submission form, flood control, and the average-rating display block are
-added in later commits; this module currently provides the schema, the
-service used to read/write ratings, the Views API integration, and the two
+Star rating storage, submission, Views integration and sidebar rankings for
+Movie nodes. The average-rating display block is added in a later commit;
+this module currently provides the schema, the read/write service, the
+submission form with flood control, the Views API integration, and the two
 sidebar blocks built on top of it.
 
 ## Schema
@@ -20,6 +20,19 @@ movie.
 - `getUserRating($nid, $ipAddress)` — the existing vote from this IP, if any
 - `getAverage($nid)` / `getCount($nid)` — aggregate helpers used by the
   display block
+
+## Submission form (`MovieRatingForm`)
+
+A 1-5 star `select` bound to a specific movie node (passed as a form
+argument, not a route parameter, since it's embedded in a block rather than
+served at its own path). Pre-fills the current visitor's existing vote, if
+any, and re-labels the submit button to "Update rating" in that case.
+
+Flood control (`\Drupal::flood()`, or rather the injected `flood` service):
+5 submissions per IP per hour (`movie_ratings.submit` event). Checked in
+`validateForm()` so a blocked visitor sees a form error instead of a
+silently-dropped vote; registered in `submitForm()` only after a rating
+actually gets recorded.
 
 ## Views integration (`hook_views_data()`)
 
