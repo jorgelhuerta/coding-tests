@@ -38,3 +38,23 @@ compareToggle.addEventListener("click", () => {
   compareChevron.classList.toggle("rotate-180", !isExpanded);
   compareToggle.setAttribute("aria-expanded", String(!isExpanded));
 });
+
+function applyButtonViewportClass() {
+  const width = window.innerWidth;
+  const viewportClass = width < 768 ? "mobile" : width < 1024 ? "tablet" : null;
+
+  document.querySelectorAll("button").forEach((button) => {
+    button.classList.remove("mobile", "tablet");
+    if (viewportClass) {
+      button.classList.add(viewportClass);
+    }
+  });
+}
+
+let resizeTimeout;
+window.addEventListener("resize", () => {
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(applyButtonViewportClass, 150);
+});
+
+applyButtonViewportClass();
