@@ -13,19 +13,23 @@ types and the fields that relate them.
 - **Director** (`director`): `Title` (base field) + `field_bio` (long text)
 - **Actor** (`actor`): `Title` (base field) + `field_bio` (long text, shared field storage with Director)
 
-The `Categories` vocabulary itself is added in a later commit, alongside its
-seeded terms. `field_category` references it by machine name and simply has
-no options until the vocabulary exists — Drupal doesn't require the target
-bundle to exist at field-creation time.
+## Taxonomy
+
+`Categories` vocabulary (`categories`), seeded with: Action, Drama, Comedy,
+Sci-Fi, Thriller, Horror, Romance, Documentary.
 
 ## Approach
 
-All content types and fields were created once against a live site via the
-Entity API (`NodeType`, `FieldStorageConfig`, `FieldConfig`) and the resulting
-configuration was captured into `config/install/`. Drupal installs these
-YAML files automatically the first time the module is enabled, so a fresh
-site gets the exact same architecture with no manual clicking through the
-Field UI required.
+Content types, fields and the vocabulary were created once against a live
+site via the Entity API (`NodeType`, `FieldStorageConfig`, `FieldConfig`,
+`Vocabulary`) and the resulting configuration was captured into
+`config/install/`. Drupal installs these YAML files automatically the first
+time the module is enabled, so a fresh site gets the exact same architecture
+with no manual clicking through the Field UI required.
+
+Taxonomy terms are content, not configuration, so they can't ship in
+`config/install`; they're seeded instead via `hook_install()` in
+`movie_content.module`.
 
 ## Setup
 

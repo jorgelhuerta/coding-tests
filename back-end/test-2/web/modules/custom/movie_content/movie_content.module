@@ -1,0 +1,33 @@
+<?php
+
+/**
+ * @file
+ * Seeds the Categories vocabulary with a starter set of genre terms.
+ */
+
+use Drupal\taxonomy\Entity\Term;
+
+/**
+ * Implements hook_install().
+ *
+ * Terms are content, not configuration, so they can't ship in
+ * config/install like the vocabulary itself; hook_install() is the
+ * standard way to seed default content on module installation.
+ */
+function movie_content_install() {
+  $terms = ['Action', 'Drama', 'Comedy', 'Sci-Fi', 'Thriller', 'Horror', 'Romance', 'Documentary'];
+
+  $existing = \Drupal::entityTypeManager()
+    ->getStorage('taxonomy_term')
+    ->loadByProperties(['vid' => 'categories']);
+  $existing_names = array_map(fn (Term $term) => $term->label(), $existing);
+
+  foreach ($terms as $name) {
+    if (!in_array($name, $existing_names, TRUE)) {
+      Term::create([
+        'vid' => 'categories',
+        'name' => $name,
+      ])->save();
+    }
+  }
+}
