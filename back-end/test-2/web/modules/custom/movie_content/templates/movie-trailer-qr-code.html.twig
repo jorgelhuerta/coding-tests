@@ -1,0 +1,14 @@
+{#
+/**
+ * @file
+ * Default theme implementation for a movie trailer QR code.
+ *
+ * Available variables:
+ * - data_uri: the QR code image as a data: URI.
+ * - url: the YouTube trailer URL the code points to.
+ */
+#}
+<div class="movie-trailer-qr">
+  <img src="{{ data_uri }}" alt="{{ 'QR code linking to the trailer for this movie'|t }}" width="200" height="200" />
+  <p class="movie-trailer-qr__caption">{{ 'Scan the QR code to watch the trailer of this movie.'|t }}</p>
+</div>

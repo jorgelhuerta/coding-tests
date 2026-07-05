@@ -8,6 +8,17 @@
 use Drupal\taxonomy\Entity\Term;
 
 /**
+ * Implements hook_theme().
+ */
+function movie_content_theme() {
+  return [
+    'movie_trailer_qr_code' => [
+      'variables' => ['data_uri' => NULL, 'url' => NULL],
+    ],
+  ];
+}
+
+/**
  * Implements hook_install().
  *
  * Terms are content, not configuration, so they can't ship in

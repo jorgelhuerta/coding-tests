@@ -20,7 +20,8 @@
         "drupal/core-project-message": "^10.2",
         "drupal/core-recommended": "^10.2",
         "drupal/migrate_plus": "^6.0",
-        "drush/drush": "^12.5"
+        "drush/drush": "^12.5",
+        "endroid/qr-code": "^6.0"
     },
     "conflict": {
         "drupal/drupal": "*"
