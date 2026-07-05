@@ -3,13 +3,26 @@
 namespace Drupal\movie_ratings;
 
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
+use Drupal\Component\Datetime\TimeInterface;
 
 /**
  * Reads and writes star ratings for Movie nodes.
  */
 class RatingManager {
 
-  public function __construct(protected Connection $database) {}
+  /**
+   * Cache tag invalidated on every rating change, for anything (the Movies
+   * view's rating filter, the sidebar rankings) that aggregates across all
+   * movies rather than a single one.
+   */
+  const LIST_CACHE_TAG = 'movie_ratings_list';
+
+  public function __construct(
+    protected Connection $database,
+    protected CacheTagsInvalidatorInterface $cacheTagsInvalidator,
+    protected TimeInterface $time,
+  ) {}
 
   /**
    * Records a rating, replacing any existing vote from the same IP.
@@ -19,9 +32,21 @@ class RatingManager {
       ->keys(['nid' => $nid, 'ip_address' => $ipAddress])
       ->fields([
         'rating' => $rating,
-        'created' => \Drupal::time()->getRequestTime(),
+        'created' => $this->time->getRequestTime(),
       ])
       ->execute();
+
+    $this->cacheTagsInvalidator->invalidateTags([
+      $this->getNodeCacheTag($nid),
+      self::LIST_CACHE_TAG,
+    ]);
+  }
+
+  /**
+   * The cache tag for a single movie's aggregate rating display.
+   */
+  public function getNodeCacheTag(int $nid): string {
+    return "movie_ratings:$nid";
   }
 
   /**

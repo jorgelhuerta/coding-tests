@@ -1,0 +1,20 @@
+uuid: ac027a08-9bb9-4a89-829b-bec4e8a4f888
+langcode: en
+status: true
+dependencies:
+  module:
+    - movie_ratings
+  theme:
+    - olivero
+id: movie_rating_display
+theme: olivero
+region: content_above
+weight: 0
+provider: null
+plugin: movie_rating_block
+settings:
+  id: movie_rating_block
+  label: 'Movie Rating'
+  label_display: ''
+  provider: movie_ratings
+visibility: {  }

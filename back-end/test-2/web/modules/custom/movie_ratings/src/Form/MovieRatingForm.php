@@ -42,6 +42,7 @@ class MovieRatingForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state, ?NodeInterface $node = NULL) {
     $form['#node_id'] = $node?->id();
+    $form['#attributes']['class'][] = 'movie-rating-form';
 
     $ip = $this->currentRequestStack->getCurrentRequest()->getClientIp();
     $existing = $node ? $this->ratingManager->getUserRating((int) $node->id(), $ip) : NULL;

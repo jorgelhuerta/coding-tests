@@ -1,0 +1,60 @@
+.movie-rating-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.movie-rating-stars {
+  display: inline-flex;
+  gap: 2px;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.movie-rating-star.is-filled {
+  color: #f5a623;
+}
+
+.movie-rating-star.is-empty {
+  color: #ccc;
+}
+
+.movie-rating-text {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.movie-rating-widget {
+  display: inline-flex;
+  gap: 4px;
+  margin-bottom: 0.5rem;
+}
+
+.movie-rating-widget-star {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: #ccc;
+  cursor: pointer;
+}
+
+.movie-rating-widget-star.is-active {
+  color: #f5a623;
+}
+
+.movie-rating-widget-star:focus-visible {
+  outline: 2px solid #0d74e7;
+  outline-offset: 2px;
+}
+
+.movie-rating-form .visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

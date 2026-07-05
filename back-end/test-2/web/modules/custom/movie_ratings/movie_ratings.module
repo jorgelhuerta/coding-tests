@@ -5,6 +5,22 @@
  * Exposes the movie_ratings table to Views.
  */
 
+use Drupal\movie_ratings\RatingManager;
+use Drupal\views\ViewExecutable;
+
+/**
+ * Implements hook_views_pre_render().
+ *
+ * Views has no way to know the movie_ratings table changed, since it's not
+ * a tracked entity type; tag the two views that read it so a new vote
+ * (which invalidates RatingManager::LIST_CACHE_TAG) actually refreshes them.
+ */
+function movie_ratings_views_pre_render(ViewExecutable $view) {
+  if (in_array($view->id(), ['movies', 'movie_rankings'], TRUE)) {
+    $view->element['#cache']['tags'][] = RatingManager::LIST_CACHE_TAG;
+  }
+}
+
 /**
  * Implements hook_views_data().
  */

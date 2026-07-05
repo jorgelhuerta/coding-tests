@@ -1,0 +1,10 @@
+rating:
+  css:
+    theme:
+      css/movie-rating.css: {}
+  js:
+    js/movie-rating.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+    - core/drupal.form
