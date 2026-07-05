@@ -5,6 +5,196 @@
  * Install/schema hooks for the Movie Ratings module.
  */
 
+use Drupal\block\Entity\Block;
+use Drupal\views\Entity\View;
+use Drupal\views\Views;
+
+/**
+ * Implements hook_install().
+ *
+ * The movie_rankings view (and its two block displays) depend on relationship
+ * data this module's own hook_views_data() defines. Shipping them as
+ * config/install YAML fails on a fresh install: Drupal processes a module's
+ * default config before that module's hooks are reflected in the views data
+ * cache, so the relationship lookup used by calculateCacheMetadata() during
+ * the view's presave comes back empty. Building the view here, after an
+ * explicit cache clear, avoids the race.
+ */
+function movie_ratings_install() {
+  \Drupal::service('views.views_data')->clear();
+  _movie_ratings_install_rankings_view();
+  _movie_ratings_install_rankings_blocks();
+}
+
+/**
+ * Creates the movie_rankings view (Top Rated / Top Popular blocks).
+ */
+function _movie_ratings_install_rankings_view() {
+  if (View::load('movie_rankings')) {
+    return;
+  }
+
+  $view = View::create([
+    'id' => 'movie_rankings',
+    'label' => 'Movie Rankings',
+    'module' => 'views',
+    'description' => 'Sidebar blocks listing the top 5 highest rated and top 5 most popular (most voted) movies.',
+    'tag' => '',
+    'base_table' => 'movie_ratings',
+    'base_field' => 'id',
+    'status' => TRUE,
+  ]);
+  $view->save();
+
+  $executable = Views::getView('movie_rankings');
+  $executable->setDisplay('default');
+  $default = $executable->displayHandlers->get('default');
+  $default->setOption('group_by', TRUE);
+  $default->setOption('access', ['type' => 'perm', 'options' => ['perm' => 'access content']]);
+  $default->setOption('cache', ['type' => 'tag', 'options' => []]);
+  $default->setOption('row', ['type' => 'fields']);
+  $default->setOption('style', ['type' => 'default']);
+
+  $relationship = [
+    'nid' => [
+      'id' => 'nid',
+      'table' => 'movie_ratings',
+      'field' => 'nid',
+      'plugin_id' => 'standard',
+      'label' => 'Movie',
+    ],
+  ];
+  $default->setOption('relationships', $relationship);
+
+  $base_fields = [
+    'nid' => [
+      'id' => 'nid',
+      'table' => 'movie_ratings',
+      'field' => 'nid',
+      'plugin_id' => 'numeric',
+      'group_type' => 'group',
+      'exclude' => TRUE,
+    ],
+    'title' => [
+      'id' => 'title',
+      'table' => 'node_field_data',
+      'field' => 'title',
+      'relationship' => 'nid',
+      'plugin_id' => 'field',
+      'group_type' => 'group',
+      'entity_type' => 'node',
+      'entity_field' => 'title',
+      'label' => 'Movie',
+    ],
+  ];
+
+  // Each block display gets its own explicit relationships, not inherited
+  // from Master - inheriting looked fine under execute(), but crashed
+  // during the view's presave cache-metadata calculation, which runs
+  // before display inheritance is fully wired up.
+  $executable->newDisplay('block', 'Top Rated', 'block_top_rated');
+  $rated = $executable->displayHandlers->get('block_top_rated');
+  $rated->setOverride('relationships', FALSE);
+  $rated->setOption('relationships', $relationship);
+  $rated->setOverride('fields', FALSE);
+  $rated->setOverride('sorts', FALSE);
+  $rated->setOverride('pager', FALSE);
+  $rated->setOption('fields', $base_fields + [
+    'rating' => [
+      'id' => 'rating',
+      'table' => 'movie_ratings',
+      'field' => 'rating',
+      'plugin_id' => 'numeric',
+      'group_type' => 'avg',
+      'label' => 'Average rating',
+      'set_precision' => TRUE,
+      'precision' => 1,
+    ],
+  ]);
+  $rated->setOption('sorts', [
+    'rating' => [
+      'id' => 'rating',
+      'table' => 'movie_ratings',
+      'field' => 'rating',
+      'plugin_id' => 'standard',
+      'order' => 'DESC',
+      'group_type' => 'avg',
+    ],
+  ]);
+  $rated->setOption('pager', ['type' => 'some', 'options' => ['items_per_page' => 5, 'offset' => 0]]);
+
+  $executable->newDisplay('block', 'Top Popular', 'block_top_popular');
+  $popular = $executable->displayHandlers->get('block_top_popular');
+  $popular->setOverride('relationships', FALSE);
+  $popular->setOption('relationships', $relationship);
+  $popular->setOverride('fields', FALSE);
+  $popular->setOverride('sorts', FALSE);
+  $popular->setOverride('pager', FALSE);
+  $popular->setOption('fields', $base_fields + [
+    'id' => [
+      'id' => 'id',
+      'table' => 'movie_ratings',
+      'field' => 'id',
+      'plugin_id' => 'numeric',
+      'group_type' => 'count',
+      'label' => 'Votes',
+    ],
+  ]);
+  $popular->setOption('sorts', [
+    'id' => [
+      'id' => 'id',
+      'table' => 'movie_ratings',
+      'field' => 'id',
+      'plugin_id' => 'standard',
+      'order' => 'DESC',
+      'group_type' => 'count',
+    ],
+  ]);
+  $popular->setOption('pager', ['type' => 'some', 'options' => ['items_per_page' => 5, 'offset' => 0]]);
+
+  $executable->storage->save();
+}
+
+/**
+ * Places the Top Rated / Top Popular blocks in the sidebar region.
+ */
+function _movie_ratings_install_rankings_blocks() {
+  $theme = \Drupal::config('system.theme')->get('default');
+
+  $placements = [
+    'movie_rankings_top_rated' => [
+      'plugin' => 'views_block:movie_rankings-block_top_rated',
+      'label' => 'Top Rated Movies',
+      'weight' => -10,
+    ],
+    'movie_rankings_top_popular' => [
+      'plugin' => 'views_block:movie_rankings-block_top_popular',
+      'label' => 'Top Popular Movies',
+      'weight' => -9,
+    ],
+  ];
+
+  foreach ($placements as $id => $info) {
+    if (Block::load($id)) {
+      continue;
+    }
+    Block::create([
+      'id' => $id,
+      'theme' => $theme,
+      'region' => 'sidebar',
+      'plugin' => $info['plugin'],
+      'weight' => $info['weight'],
+      'settings' => [
+        'id' => $info['plugin'],
+        'label' => $info['label'],
+        'label_display' => 'visible',
+        'provider' => 'views',
+      ],
+      'visibility' => [],
+    ])->save();
+  }
+}
+
 /**
  * Implements hook_schema().
  */

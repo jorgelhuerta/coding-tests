@@ -82,7 +82,24 @@ Both use Views' native aggregation ("group by") query mode rather than
 custom SQL. Built programmatically via `ViewExecutable::newDisplay()` and
 `setOption()`/`setOverride()` — hand-writing a display's `defaults` override
 map directly is unreliable, since it's schema-governed and gets reset to
-"inherit everything" unless set through `setOverride()`.
+"inherit everything" unless set through `setOverride()`. Each block display
+also gets its own explicit `relationships`, not inherited from Master:
+inheriting looked fine when executing the view directly, but crashed with
+"Undefined array key" during the view config entity's presave cache-metadata
+calculation, which runs before display inheritance is fully wired up.
+
+**Built in `hook_install()`, not `config/install`.** This view's relationship
+depends on `hook_views_data()` — defined by this same module — being
+reflected in Drupal's Views data cache. On a fresh install, Drupal installs
+a module's default config *before* that module's own hooks are warm in that
+cache, so building it as YAML in `config/install` fails silently on first
+enable (the view's presave throws, but `pm:enable` only surfaces it as an
+unrelated-looking "block plugin not found" warning for the two placements).
+`hook_install()` explicitly clears `views.views_data` first, then builds the
+view and places its blocks — order that isn't available to `config/install`.
+The `movies` view doesn't hit this: its rating filter is a plugin class, not
+a `hook_views_data()`-defined relationship, so plugin discovery finds it
+without the same cache warm-up dependency.
 
 ## Movies view (`/movies`)
 

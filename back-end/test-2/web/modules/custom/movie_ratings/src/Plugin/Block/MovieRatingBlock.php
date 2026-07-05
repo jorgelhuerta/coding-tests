@@ -36,6 +36,9 @@ class MovieRatingBlock extends BlockBase implements ContainerFactoryPluginInterf
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static(
       $configuration,
@@ -47,6 +50,9 @@ class MovieRatingBlock extends BlockBase implements ContainerFactoryPluginInterf
     );
   }
 
+  /**
+   * Returns the movie node for the current route, if any.
+   */
   protected function getMovieNode(): ?NodeInterface {
     $node = $this->routeMatch->getParameter('node');
     return $node instanceof NodeInterface && $node->bundle() === 'movie' ? $node : NULL;

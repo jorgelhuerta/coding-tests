@@ -2,6 +2,7 @@
 
 namespace Drupal\movie_content\Plugin\Field\FieldFormatter;
 
+use Drupal\Core\Url;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
 use Endroid\QrCode\Builder\Builder;
@@ -30,7 +31,7 @@ class YoutubeTrailerQrFormatter extends FormatterBase {
         continue;
       }
 
-      $url = \Drupal\Core\Url::fromUri($item->uri)->toString();
+      $url = Url::fromUri($item->uri)->toString();
       $result = (new Builder())->build(data: $url, size: 200, margin: 10);
 
       $elements[$delta] = [

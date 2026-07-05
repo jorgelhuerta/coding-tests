@@ -18,12 +18,18 @@ use Drupal\views\Plugin\views\filter\FilterPluginBase;
  */
 class MinimumAverageRating extends FilterPluginBase {
 
+  /**
+   * {@inheritdoc}
+   */
   protected function defineOptions() {
     $options = parent::defineOptions();
     $options['value'] = ['default' => ''];
     return $options;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   protected function valueForm(&$form, FormStateInterface $form_state) {
     $form['value'] = [
       '#type' => 'number',
@@ -35,19 +41,27 @@ class MinimumAverageRating extends FilterPluginBase {
     ];
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function canExpose() {
     return TRUE;
   }
 
   /**
+   * Unwraps the exposed value so callers always get a plain scalar.
+   *
    * Views stores exposed filter submissions as an array even for a single
-   * scalar value; unwrap it so callers always get a plain value.
+   * scalar value.
    */
   protected function getScalarValue() {
     $value = $this->value;
     return is_array($value) ? reset($value) : $value;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function query() {
     $value = $this->getScalarValue();
     if ($value === '' || $value === NULL || $value === FALSE) {

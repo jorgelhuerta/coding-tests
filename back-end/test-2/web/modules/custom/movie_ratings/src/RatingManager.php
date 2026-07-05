@@ -12,9 +12,10 @@ use Drupal\Component\Datetime\TimeInterface;
 class RatingManager {
 
   /**
-   * Cache tag invalidated on every rating change, for anything (the Movies
-   * view's rating filter, the sidebar rankings) that aggregates across all
-   * movies rather than a single one.
+   * Cache tag invalidated on every rating change.
+   *
+   * Used by anything that aggregates across all movies rather than a
+   * single one: the Movies view's rating filter, the sidebar rankings.
    */
   const LIST_CACHE_TAG = 'movie_ratings_list';
 

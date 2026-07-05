@@ -25,6 +25,9 @@ class MovieRatingForm extends FormBase {
     protected RequestStack $currentRequestStack,
   ) {}
 
+  /**
+   * {@inheritdoc}
+   */
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('movie_ratings.manager'),
@@ -33,6 +36,9 @@ class MovieRatingForm extends FormBase {
     );
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getFormId() {
     return 'movie_rating_form';
   }
